@@ -4,7 +4,7 @@ import time
 import json
 import requests
 
-url_flume = 'http://127.0.0.1:80'
+url_flume = 'http://127.0.0.1:9999'
 headers = {'content-type': 'application/json'}
 
 while True:
@@ -18,11 +18,15 @@ while True:
         'customer_id': customerID,
         'revenue': revenue
     }
-    jsonEvent = json.dumps(data)
+    wusa = {
+        'headers': data
+    }
+    jsonEvent =  '[{}]'.format(json.dumps(wusa))  
+    print(jsonEvent);
 
     try:
         response = requests.post(url_flume, data=jsonEvent, headers=headers)
+        print(response)
     except:
         print("Request failed.")
-        pass
     time.sleep(1 / interval)

@@ -19,8 +19,7 @@
 
 # Enviroment variables can be set here.
 
-export JAVA_HOME=/usr/lib/jvm/default-java
-
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 # Give Flume more memory and pre-allocate, enable remote monitoring via JMX
 export JAVA_OPTS="-Xmx500m"
 

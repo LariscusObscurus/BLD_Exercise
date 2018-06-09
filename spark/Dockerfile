@@ -13,5 +13,7 @@ RUN mkdir /usr/local/spark && \
 RUN export PATH=$PATH:/usr/local/spark/bin
 
 COPY spark.py /spark.py
+COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "/bin/bash" ]
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

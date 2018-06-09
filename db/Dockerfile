@@ -10,11 +10,14 @@ RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key
     add-apt-repository "deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" && \
     apt-get update && apt-get install -y postgresql-10
 
+COPY create_tables.sql /create_tables.sql
+
 #Create Postgres user
 USER postgres
 RUN /etc/init.d/postgresql start && \
     psql --command "CREATE USER pguser WITH SUPERUSER PASSWORD 'pguser';" && \
-    createdb -O pguser pgdb
+    createdb -O pguser pgdb && \ 
+    psql pgdb -f /create_tables.sql
 
 USER root
 RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/10/main/pg_hba.conf

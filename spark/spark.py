@@ -9,7 +9,7 @@ from pyspark.streaming.flume import FlumeUtils
 
 def writeToDb(iter):
     for result in iter:
-        print(result)
+        #print(result)
         conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='db')
         cur = conn.cursor()
 
@@ -18,6 +18,7 @@ def writeToDb(iter):
         conn.close()
 
 def test(pair):
+    print('Processing data...')
     result = {
         'product_id': pair[0],
         'revenue': 0.0,
@@ -30,7 +31,7 @@ def test(pair):
             result['views'] += 1
         else:
             result['purchases'] += 1
-    print(result)
+    #print(result)
 
     return result;
 
@@ -52,7 +53,7 @@ if __name__ == "__main__":
     print('Start listening at {}:{}'.format(hostname, port))
     kvs = FlumeUtils.createStream(ssc, hostname, int(port))
 
-    kvs.map(lambda x: x[0]).window(60, 10).foreachRDD(process)
+    kvs.map(lambda x: x[0]).window(60, 60).foreachRDD(process)
 
     ssc.start()
 ssc.awaitTermination()

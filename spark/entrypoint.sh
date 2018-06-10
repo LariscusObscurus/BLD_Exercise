@@ -1,2 +1,2 @@
 #!/bin/bash
-exec spark-submit spark.py flume 8888
+exec /usr/local/spark/bin/spark-submit --jars /data/spark-streaming-flume-assembly_2.11-2.3.0.jar spark.py 192.168.0.15 8888

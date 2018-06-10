@@ -10,6 +10,7 @@ RUN mkdir /usr/local/flume && \
     && tar xzvf apache-flume-1.8.0-bin.tar.gz -C /usr/local/flume --strip-components=1
 
 EXPOSE 9999
+EXPOSE 9998
 
 COPY flume.conf /usr/local/flume/conf/flume.conf
 COPY flume-env.sh /usr/local/flume/conf/flume-env.sh

@@ -4,28 +4,39 @@ import time
 import json
 import requests
 
-url_flume = 'http://127.0.0.1:9999'
+url_flume = 'http://192.168.0.15:{}'
+purchases_port = 9999
+views_port = 9998
+
 headers = {'content-type': 'application/json'}
 
 while True:
     interval = random.randint(10, 100)
+    event_type = 'view' if random.randint(0, 1) else 'purchase'
+    revenue = 0 if event_type == 'view' else random.random() * 100
+
     customerID = random.randint(0, 100000)
     productID = random.randint(0, 100)
-    revenue = random.random() * 100
+
     data = {
-        'timestamp': time.time(),
+        'type': event_type,
         'product_id': productID,
         'customer_id': customerID,
-        'revenue': revenue
+        'revenue': revenue,
+        'timestamp': time.time(),
     }
+
+
     wusa = {
-        'headers': data
+        'headers': data,
+        'body': "{}".format(data)
     }
     jsonEvent =  '[{}]'.format(json.dumps(wusa))  
     print(jsonEvent);
 
     try:
-        response = requests.post(url_flume, data=jsonEvent, headers=headers)
+        port_to_use = views_port if event_type == 'view' else purchases_port
+        response = requests.post(url_flume.format(port_to_use), data=jsonEvent, headers=headers)
         print(response)
     except:
         print("Request failed.")

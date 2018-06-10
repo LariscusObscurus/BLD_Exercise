@@ -1,0 +1,20 @@
+version: '1'
+services:
+  flume:
+    build: ./flume
+    depends_on:
+      - spark
+  generator:
+    build: ./generator
+    depends_on: 
+      - flume 
+  db:
+    build: ./db
+  monitor:
+    build: ./monitor
+    depends_on:
+      - db
+  spark:
+    build: ./spark
+    depends_on:
+      - db 

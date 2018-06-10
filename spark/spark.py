@@ -7,28 +7,35 @@ from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.flume import FlumeUtils
 
+def writeToDb(iter):
+    for result in iter:
+        print(result)
+        conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='192.168.0.15')
+        cur = conn.cursor()
+
+        cur.execute("INSERT INTO event_statistics (product_id, views, purchases, revenue, timestamp) VALUES (%s, %s, %s, %s, NOW())", (result['product_id'],result['views'],result['purchases'], result['revenue']))
+        conn.commit()
+        conn.close()
 
 def test(pair):
     result = {
         'product_id': pair[0],
         'revenue': 0.0,
+        'purchases': 0,
+        'views': 0
     }
     for it in pair[1]:
         result['revenue'] += float(it['revenue'])
+        if it['type'] == 'view':
+            result['views'] += 1
+        else:
+            result['purchases'] += 1
     print(result)
 
-    conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='192.168.0.15')
-    cur = conn.cursor()
-
-    # Hello SQL injection 
-    cur.execute("INSERT INTO event_statistics (product_id, views, purchases, revenue, timestamp) VALUES (%s, 1, 1, %s, NOW())", (result['product_id'], result['revenue']))
-    conn.commit()
-    conn.close()
     return result;
 
 def process(rdd):
-    result = rdd.groupBy(lambda rdd: rdd['product_id']).map(test)
-    result.collect()
+    rdd.groupBy(lambda rdd: rdd['product_id']).map(test).foreachPartition(writeToDb)
 
 
 if __name__ == "__main__":

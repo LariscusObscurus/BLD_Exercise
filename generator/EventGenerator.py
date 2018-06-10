@@ -35,7 +35,7 @@ while True:
     print(jsonEvent);
 
     try:
-        port_to_use = views_port if event_type == 'view' else purchases_port
+        port_to_use = purchases_port
         response = requests.post(url_flume.format(port_to_use), data=jsonEvent, headers=headers)
         print(response)
     except:

@@ -11,6 +11,8 @@ RUN mkdir /usr/local/spark && \
 
 RUN wget http://central.maven.org/maven2/org/apache/spark/spark-streaming-flume-assembly_2.11/2.3.0/spark-streaming-flume-assembly_2.11-2.3.0.jar
 
+RUN apt-get install -y python-pip && pip install psycopg2
+
 #Add spark-submit to PATH
 RUN export PATH=$PATH:/usr/local/spark/bin
 

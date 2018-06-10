@@ -10,7 +10,7 @@ from pyspark.streaming.flume import FlumeUtils
 def writeToDb(iter):
     for result in iter:
         print(result)
-        conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='192.168.0.15')
+        conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='db')
         cur = conn.cursor()
 
         cur.execute("INSERT INTO event_statistics (product_id, views, purchases, revenue, timestamp) VALUES (%s, %s, %s, %s, NOW())", (result['product_id'],result['views'],result['purchases'], result['revenue']))
@@ -43,12 +43,13 @@ if __name__ == "__main__":
         print("Usage: flume_wordcount.py <hostname> <port>", file=sys.stderr)
         sys.exit(-1)
 
-    sc = SparkContext(appName="PythonStreamingFlumeWordCount")
+    sc = SparkContext(appName="PythonStreamingFlume")
     sc.setLogLevel('ERROR')
 
     ssc = StreamingContext(sc, 1)
 
     hostname, port = sys.argv[1:]
+    print('Start listening at {}:{}'.format(hostname, port))
     kvs = FlumeUtils.createStream(ssc, hostname, int(port))
 
     kvs.map(lambda x: x[0]).window(60, 10).foreachRDD(process)

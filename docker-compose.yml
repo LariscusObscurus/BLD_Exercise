@@ -1,8 +1,10 @@
-version: '1'
+version: '2'
 services:
   flume:
     build: ./flume
-    depends_on:
+    ports:
+    - 9999:9999
+    depends_on: 
       - spark
   generator:
     build: ./generator
@@ -10,11 +12,15 @@ services:
       - flume 
   db:
     build: ./db
+    ports:
+    - 5432:5432
   monitor:
     build: ./monitor
     depends_on:
       - db
   spark:
     build: ./spark
+    ports:
+      - 8888:8888
     depends_on:
       - db 

@@ -4,7 +4,7 @@ import time
 import json
 import requests
 
-url_flume = 'http://192.168.0.15:{}'
+url_flume = 'http://flume:{}'
 purchases_port = 9999
 views_port = 9998
 
@@ -32,12 +32,12 @@ while True:
         'body': "{}".format(data)
     }
     jsonEvent =  '[{}]'.format(json.dumps(wusa))  
-    print(jsonEvent);
+    # print(jsonEvent);
 
     try:
         port_to_use = purchases_port
         response = requests.post(url_flume.format(port_to_use), data=jsonEvent, headers=headers)
-        print(response)
+        #print(response)
     except:
         print("Request failed.")
     time.sleep(1 / interval)

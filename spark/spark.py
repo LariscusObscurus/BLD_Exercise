@@ -19,6 +19,7 @@ def writeToDb(iter):
 
 def test(pair):
     print('Processing data...')
+    sys.stdout.flush()
     result = {
         'product_id': pair[0],
         'revenue': 0.0,
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     print('Start listening at {}:{}'.format(hostname, port))
     kvs = FlumeUtils.createStream(ssc, hostname, int(port))
 
-    kvs.map(lambda x: x[0]).window(60, 60).foreachRDD(process)
+    kvs.map(lambda x: x[0]).window(60, 10).foreachRDD(process)
 
     ssc.start()
 ssc.awaitTermination()

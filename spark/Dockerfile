@@ -13,6 +13,8 @@ RUN wget http://central.maven.org/maven2/org/apache/spark/spark-streaming-flume-
 
 RUN apt-get install -y python-pip && pip install psycopg2
 
+EXPOSE 8888
+
 #Add spark-submit to PATH
 RUN export PATH=$PATH:/usr/local/spark/bin
 

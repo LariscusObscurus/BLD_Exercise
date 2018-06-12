@@ -1,7 +1,7 @@
 FROM debian:stretch
 
 RUN set -x && \
-    apt-get update && apt-get install -y python3 wget openjdk-8-jdk python
+    apt-get update && apt-get install -y python3 wget openjdk-8-jdk-headless python
 
 WORKDIR /data
 

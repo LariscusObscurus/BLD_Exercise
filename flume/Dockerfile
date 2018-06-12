@@ -1,7 +1,7 @@
 FROM debian:stretch
 
 RUN set -x && \
-    apt-get update && apt-get install -y wget openjdk-8-jdk
+    apt-get update && apt-get install -y wget openjdk-8-jdk-headless
 
 WORKDIR /data
 

@@ -15,9 +15,10 @@ while True:
     if cur.rowcount>0:
         results = cur.fetchall()
         toprint="TOP PRODUKTE (Views) der letzten 5 Minuten\n"
-        for x in range(0, 11):
-            if x<len(results):
-                toprint+=str(x+1)+". "+str(results[x][0])+"("+str(results[x][1])+")\n"
+        x=0
+        for product_id, views in results:
+            x+=1
+            toprint+=str(x)+". Produkt "+str(product_id)+" ("+str(views)+" views)\n"
         print(toprint)
         sys.stdout.flush()
 

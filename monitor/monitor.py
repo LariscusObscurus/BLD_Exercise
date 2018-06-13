@@ -10,7 +10,7 @@ conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='d
 cur = conn.cursor()
 
 while True:
-    cur.execute("select product_id, views from event_statistics where timestamp > CURRENT_TIMESTAMP - INTERVAL '5 minutes' ORDER BY views DESC")
+    cur.execute("select product_id, sum(views) as views from event_statistics where timestamp > CURRENT_TIMESTAMP - INTERVAL '5 minutes' group by product_id ORDER BY views DESC limit 10")
     if cur.rowcount>0:
         results = cur.fetchall()
         toprint="TOP PRODUKTE (Views) der letzten 5 Minuten\n"

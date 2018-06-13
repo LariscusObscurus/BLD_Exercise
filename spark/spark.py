@@ -18,7 +18,7 @@ def writeToDb(iter):
         conn.close()
 
 def test(pair):
-    print('Processing data...')
+    #print('Processing data...')
     sys.stdout.flush()
     result = {
         'product_id': pair[0],
@@ -34,7 +34,7 @@ def test(pair):
             result['purchases'] += 1
     #print(result)
 
-    return result;
+    return result
 
 def process(rdd):
     rdd.groupBy(lambda rdd: rdd['product_id']).map(test).foreachPartition(writeToDb)
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     print('Start listening at {}:{}'.format(hostname, port))
     kvs = FlumeUtils.createStream(ssc, hostname, int(port))
 
-    kvs.map(lambda x: x[0]).window(60, 10).foreachRDD(process)
+    kvs.map(lambda x: x[0]).window(10, 10).foreachRDD(process)
 
     ssc.start()
 ssc.awaitTermination()

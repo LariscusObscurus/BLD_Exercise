@@ -4,21 +4,21 @@ import time
 import sys
 import pprint
 
-time.sleep(15)
+time.sleep(20)
 
 conn = psycopg2.connect(dbname='pgdb', user='pguser', password='pguser', host='db')
 cur = conn.cursor()
 
 while True:
     
-    cur.execute("select product_id, sum(views) as views from event_statistics where timestamp > (statement_timestamp() - INTERVAL '5 minutes') group by product_id ORDER BY views DESC limit 10")
+    cur.execute("select product_id, sum(revenue) as revenue from event_statistics where timestamp > (statement_timestamp() - INTERVAL '5 minutes') group by product_id ORDER BY revenue DESC limit 10")
     if cur.rowcount>0:
         results = cur.fetchall()
-        toprint="TOP PRODUKTE (Views) der letzten 5 Minuten\n"
+        toprint="TOP PRODUKTE (Umsatz) der letzten 5 Minuten\n"
         x=0
-        for product_id, views in results:
+        for product_id, revenue in results:
             x+=1
-            toprint+=str(x)+". Produkt "+str(product_id)+" ("+str(views)+" views)\n"
+            toprint+=str(x)+". Produkt "+str(product_id)+" ("+str(revenue)+" EUR)\n"
         print(toprint)
         sys.stdout.flush()
 
